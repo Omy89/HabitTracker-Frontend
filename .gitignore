@@ -141,3 +141,15 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# macOS
+.DS_Store
+
+# certs
+*.pem
+
+# vercel
+.vercel
+
+# next.js
+next-env.d.ts
