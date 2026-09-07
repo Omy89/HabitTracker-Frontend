@@ -1,16 +1,23 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import AppBar from './components/layout/AppBar';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Home() {
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoading) return;
+    router.replace(isAuthenticated ? "/dashboard" : "/login");
+  }, [isLoading, isAuthenticated, router]);
+
   return (
-    <div className="flex flex-col flex-1 items-center font-sans">
-      <AppBar />
-      <h1 className="text-6xl font-bold text-black">Prueba de Next.js 13</h1>
-      <p className="mt-6 text-2xl text-black">
-        no he avanzado nada de el proyecto
-      </p>
-    </div>
+    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+      <CircularProgress />
+    </Box>
   );
 }
