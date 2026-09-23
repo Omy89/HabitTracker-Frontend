@@ -1,90 +1,89 @@
-# Habit Tracker — Frontend (Avance 2)
+# Habit Tracker — Frontend
 
-Frontend en **Next.js (App Router) + Material UI** para el proyecto Habit
-Tracker, cubriendo las pantallas funcionales pedidas en la **Entrega 2**:
+Interfaz del proyecto **Habit Tracker** (Proyecto Final de Desarrollo Web):
+una aplicación para crear hábitos, marcarlos como completados y ver el
+progreso con rachas, porcentajes y gráficas.
 
-- Login
-- Registro (con validación en tiempo real)
-- Dashboard básico (rachas, % de cumplimiento, gráficas semanal/mensual)
-- Lista de hábitos (crear, editar, eliminar, activar/desactivar, marcar
-  como completado hoy)
-- Crear / Editar hábito (mismo formulario, en un diálogo modal)
-- Estadísticas y Perfil (adelantadas, ya que el sidebar del Avance 1 las
-  contempla como navegación permanente)
+Backend: https://github.com/Omy89/HabitTracker-Backend
 
-## ⚠️ Alcance: solo frontend, con datos simulados
+## Tecnologías
 
-Este avance es **solo la interfaz**, tal como se pidió. Como todavía no
-existe el backend de NestJS + MongoDB, toda la persistencia (usuarios,
-hábitos, registros diarios) vive en `lib/mockApi.js` y se guarda en
-`localStorage` del navegador para que la app se sienta completa y
-funcional mientras la usas (crear cuenta, iniciar sesión, crear hábitos,
-marcar días, ver rachas y gráficas, todo persiste al recargar).
+- **Next.js 14** (App Router) + **TypeScript**
+- **Material UI 6** (tema personalizado, iconos Material, `DateCalendar` de MUI X)
+- **Recharts** para las gráficas
+- **Zod** para la validación de formularios
+- **dayjs** como adaptador de fechas del calendario
 
-**Importante para la Entrega 2 real:** el enunciado pide que la entrega
-funcional NO use mock data para las funcionalidades principales. Por eso
-`lib/mockApi.js` está diseñado como una capa aislada: cada función tiene
-la misma firma que tendrá la futura llamada a la API REST (recibe los
-mismos parámetros, regresa una `Promise`, puede fallar con un `Error`).
-Cuando el backend esté listo, solo hay que reemplazar el contenido de esas
-funciones por `fetch(...)` contra NestJS — los componentes y los Contexts
-(`AuthContext`, `HabitsContext`) no necesitan cambiar.
+## Instalación
 
-Hay un usuario de ejemplo precargado para probar sin registrarte:
-
-```
-correo: andrea@example.com
-contraseña: 123456
-```
-
-## Cómo correrlo
+Requisitos: Node.js 20+ y el backend corriendo (por defecto en `http://localhost:3001`).
 
 ```bash
 npm install
+cp .env.example .env.local   # NEXT_PUBLIC_API_URL=http://localhost:3001
 npm run dev
 ```
 
-Abre http://localhost:3000 — te redirige a `/login` si no hay sesión, o a
-`/dashboard` si ya iniciaste sesión antes (la sesión se guarda en
-`localStorage`).
+Abre http://localhost:3000. Si no hay sesión te lleva a `/login`; si ya
+iniciaste sesión, al `/dashboard`.
 
-## Estructura
+```bash
+npm run build   # build de producción
+npm run start   # servir el build
+```
+
+## Arquitectura
+
+La app es el cliente de una arquitectura cliente-servidor: toda la
+información viene de la API REST de NestJS (no hay datos simulados). La
+sesión es un JWT en una cookie `httpOnly` que el navegador envía
+automáticamente (`credentials: 'include'`).
 
 ```
 app/
-  login/page.js            Pantalla de inicio de sesión
-  register/page.js         Pantalla de registro con validación en tiempo real
-  (app)/layout.js          Layout protegido: Sidebar + Navbar + guard de auth
-  (app)/dashboard/page.js  Dashboard: cards, % cumplimiento, gráficas
-  (app)/habits/page.js     Lista de hábitos + FAB para crear
-  (app)/statistics/page.js Estadísticas generales
-  (app)/profile/page.js    Datos de cuenta, cambio de contraseña, resumen
+  login/, register/          Inicio de sesión y registro
+  (app)/layout.tsx           Layout protegido: Sidebar + Navbar + guard de sesión
+  (app)/dashboard/           Tarjetas, % de hoy, gráfica semanal y mensual, check-in
+  (app)/habits/              Lista de hábitos, crear/editar, historial, eliminar
+  (app)/statistics/          Estadísticas con filtro por rango de fechas
+  (app)/profile/             Datos de la cuenta, cambio de contraseña, resumen
 components/
-  Sidebar.js, Topbar.js     Navegación
-  HabitFormDialog.js        Formulario de crear/editar hábito (modal)
-  ConfirmDialog.js          Confirmación antes de eliminar
-  EmptyState.js, StatCard.js, AuthLayout.js
+  Sidebar, Topbar            Navegación
+  HabitFormDialog            Formulario crear/editar hábito (diálogo)
+  HabitHistoryDialog         Historial del hábito en calendario
+  ConfirmDialog              Confirmación de acciones críticas
+  PasswordStrength           Requisitos y seguridad de la contraseña
+  StatCard, EmptyState, CompletionBar, AuthLayout
 context/
-  AuthContext.js            Sesión de usuario
-  HabitsContext.js          Estado de hábitos (CRUD, toggle, etc.)
+  AuthContext                Sesión del usuario
+  HabitsContext              Estado de los hábitos (CRUD, activar, progreso)
 lib/
-  mockApi.js                Capa de datos simulada (ver nota arriba)
-  theme.js                  Tema de Material UI (paleta, tipografía, forma)
-  EmotionRegistry.js         Integración de Emotion con el App Router
+  api.ts                     Llamadas a la API REST
+  schemas.ts                 Validaciones con Zod
+  password.ts                Política de contraseñas (igual que el backend)
+  dates.ts, format.ts        Fechas locales y formato de rachas
+  errors.ts                  Mensajes de error para el usuario
+  theme.ts                   Tema de Material UI
 ```
 
-## Sistema de diseño aplicado
+## Funcionalidades
 
-Tomado directamente del Avance 1: fondo casi blanco, azul (#2563EB) como
-color principal, azul oscuro en hover, grises para texto secundario,
-verde/rojo/ámbar para estados. Tipografía Roboto, íconos Material Icons,
-componentes con bordes redondeados y sombras suaves (cards, diálogos,
-chips, badges, barras de progreso, gráficas).
+- Registro, inicio y cierre de sesión, perfil (nombre, correo, contraseña).
+- Hábitos: crear, editar, eliminar (con confirmación), activar/desactivar,
+  frecuencia diaria, semanal o personalizada (días de la semana), categoría,
+  prioridad (ordena la lista), fecha de inicio y fin opcional.
+- Seguimiento: marcar como completado, progreso diario, semanal y mensual por
+  hábito, historial en calendario.
+- Dashboard: hábitos activos, completados hoy, racha actual, mejor racha,
+  porcentaje de cumplimiento, gráfica semanal y mensual.
+- Estadísticas: total, activos, finalizados, días consecutivos, progreso
+  mensual, tendencia de cumplimiento, desglose por categoría y por hábito.
+- UX: estados de carga (skeletons), estados vacíos, mensajes de éxito/error
+  (snackbar y alerts), validación en tiempo real y diseño responsive.
 
-## Pendiente para próximas entregas
+## Sistema de diseño
 
-- Conectar con el backend real (Auth, Users, Habits, Statistics en NestJS)
-  y quitar `mockApi.js`.
-- Filtros por rango de fechas y comparativas entre meses en Estadísticas
-  (Entrega 3).
-- Pruebas de usabilidad y accesibilidad más profundas.
+Tomado del Avance 1: fondo casi blanco, azul `#2563EB` como color principal,
+azul oscuro en hover, grises para texto secundario y verde/rojo/ámbar para
+estados. Tipografía Roboto, iconos Material Icons y componentes con bordes
+redondeados y sombras suaves.

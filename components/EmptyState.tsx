@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import type SvgIcon from "@mui/material/SvgIcon";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import type SvgIcon from '@mui/material/SvgIcon';
 
 interface EmptyStateProps {
   icon?: typeof SvgIcon;
@@ -24,13 +24,13 @@ export default function EmptyState({
   return (
     <Box
       sx={{
-        textAlign: "center",
+        textAlign: 'center',
         py: 8,
         px: 3,
-        border: "1px dashed",
-        borderColor: "divider",
+        border: '1px dashed',
+        borderColor: 'divider',
         borderRadius: 4,
-        bgcolor: "background.paper",
+        bgcolor: 'background.paper',
       }}
     >
       {Icon && (
@@ -38,13 +38,13 @@ export default function EmptyState({
           sx={{
             width: 56,
             height: 56,
-            borderRadius: "50%",
-            bgcolor: "primary.light",
-            color: "primary.contrastText",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mx: "auto",
+            borderRadius: '50%',
+            bgcolor: 'primary.light',
+            color: 'primary.contrastText',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mx: 'auto',
             mb: 2,
             opacity: 0.9,
           }}
@@ -58,12 +58,16 @@ export default function EmptyState({
       <Typography
         variant="body2"
         color="text.secondary"
-        sx={{ maxWidth: 360, mx: "auto", mb: onAction ? 3 : 0 }}
+        sx={{ maxWidth: 360, mx: 'auto', mb: onAction ? 3 : 0 }}
       >
         {description}
       </Typography>
       {onAction && (
-        <Button variant="contained" startIcon={<AddRoundedIcon />} onClick={onAction}>
+        <Button
+          variant="contained"
+          startIcon={<AddRoundedIcon />}
+          onClick={onAction}
+        >
           {actionLabel}
         </Button>
       )}

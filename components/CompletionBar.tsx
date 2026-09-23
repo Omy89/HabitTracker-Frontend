@@ -1,27 +1,34 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
-import Typography from "@mui/material/Typography";
+import { useState } from 'react';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
+import Typography from '@mui/material/Typography';
 
 interface CompletionBarProps {
   value: number;
   onCommit: (value: number) => void;
   disabled?: boolean;
+  label?: string;
 }
 
-/** An editable, click-and-drag bar for today's completion percentage. */
-export default function CompletionBar({ value, onCommit, disabled }: CompletionBarProps) {
+export default function CompletionBar({
+  value,
+  onCommit,
+  disabled,
+  label = "Today's progress",
+}: CompletionBarProps) {
   const [dragValue, setDragValue] = useState<number | null>(null);
   const shown = dragValue ?? value;
 
-  const color = shown >= 100 ? "success" : shown >= 40 ? "warning" : "primary";
+  const color = shown >= 100 ? 'success' : shown >= 40 ? 'warning' : 'primary';
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 160 }}>
+    <Box
+      sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 160 }}
+    >
       <Slider
-        aria-label="Today's progress"
+        aria-label={label}
         value={shown}
         onChange={(_, v) => setDragValue(v as number)}
         onChangeCommitted={(_, v) => {
@@ -35,20 +42,24 @@ export default function CompletionBar({ value, onCommit, disabled }: CompletionB
         disabled={disabled}
         sx={{
           height: 10,
-          "& .MuiSlider-thumb": {
+          '& .MuiSlider-thumb': {
             width: 20,
             height: 20,
-            boxShadow: "0 1px 4px rgba(17,24,39,0.25)",
+            boxShadow: '0 1px 4px rgba(17,24,39,0.25)',
           },
-          "& .MuiSlider-rail": {
+          '& .MuiSlider-rail': {
             opacity: 0.3,
           },
-          "& .MuiSlider-track": {
-            border: "none",
+          '& .MuiSlider-track': {
+            border: 'none',
           },
         }}
       />
-      <Typography variant="body2" fontWeight={700} sx={{ minWidth: 40, textAlign: "right" }}>
+      <Typography
+        variant="body2"
+        fontWeight={700}
+        sx={{ minWidth: 40, textAlign: 'right' }}
+      >
         {shown}%
       </Typography>
     </Box>

@@ -26,7 +26,6 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // undefined = loading, null = no session
   const [user, setUser] = useState<Session | null | undefined>(undefined);
   const router = useRouter();
 

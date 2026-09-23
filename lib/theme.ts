@@ -1,51 +1,47 @@
-"use client";
+'use client';
 
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
-// Palette and typography from the design system established for this
-// project: near-white background, blue as the primary color, dark blue on
-// hover, grays for secondary text, green/red/amber for status. Roboto +
-// Material Icons. Rounded corners and soft shadows everywhere.
 const theme = createTheme({
   palette: {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#2563EB",
-      dark: "#1D4ED8",
-      light: "#60A5FA",
-      contrastText: "#FFFFFF",
+      main: '#2563EB',
+      dark: '#1D4ED8',
+      light: '#60A5FA',
+      contrastText: '#FFFFFF',
     },
     secondary: {
-      main: "#7C3AED",
+      main: '#7C3AED',
     },
     success: {
-      main: "#16A34A",
+      main: '#16A34A',
     },
     error: {
-      main: "#DC2626",
+      main: '#DC2626',
     },
     warning: {
-      main: "#D97706",
+      main: '#D97706',
     },
     background: {
-      default: "#FAFAFB",
-      paper: "#FFFFFF",
+      default: '#FAFAFB',
+      paper: '#FFFFFF',
     },
     text: {
-      primary: "#111827",
-      secondary: "#6B7280",
+      primary: '#111827',
+      secondary: '#6B7280',
     },
-    divider: "#E5E7EB",
+    divider: '#E5E7EB',
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: { fontWeight: 700 },
     h2: { fontWeight: 700 },
     h3: { fontWeight: 700 },
-    h4: { fontWeight: 700, fontSize: "1.9rem" },
-    h5: { fontWeight: 600, fontSize: "1.375rem" },
-    h6: { fontWeight: 600, fontSize: "1.1rem" },
-    button: { fontWeight: 600, textTransform: "none" },
+    h4: { fontWeight: 700, fontSize: '1.9rem' },
+    h5: { fontWeight: 600, fontSize: '1.375rem' },
+    h6: { fontWeight: 600, fontSize: '1.1rem' },
+    button: { fontWeight: 600, textTransform: 'none' },
   },
   shape: {
     borderRadius: 14,
@@ -54,7 +50,7 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundImage: "none",
+          backgroundImage: 'none',
         },
       },
     },
@@ -62,8 +58,9 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 16,
-          boxShadow: "0 1px 3px rgba(17, 24, 39, 0.08), 0 1px 2px rgba(17,24,39,0.04)",
-          border: "1px solid #EEF0F3",
+          boxShadow:
+            '0 1px 3px rgba(17, 24, 39, 0.08), 0 1px 2px rgba(17,24,39,0.04)',
+          border: '1px solid #EEF0F3',
         },
       },
     },
@@ -86,7 +83,7 @@ const theme = createTheme({
     },
     MuiTextField: {
       defaultProps: {
-        variant: "outlined",
+        variant: 'outlined',
       },
     },
     MuiDialog: {
@@ -99,7 +96,7 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          boxShadow: "0 1px 2px rgba(17,24,39,0.06)",
+          boxShadow: '0 1px 2px rgba(17,24,39,0.06)',
         },
       },
     },

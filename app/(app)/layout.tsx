@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useEffect, useState, type ReactNode } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useAuth } from "@/context/AuthContext";
-import Sidebar from "@/components/Sidebar";
-import Topbar from "@/components/Topbar";
+import { useEffect, useState, type ReactNode } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useAuth } from '@/context/AuthContext';
+import Sidebar from '@/components/Sidebar';
+import Topbar from '@/components/Topbar';
 
 const TITLES: Record<string, string> = {
-  "/dashboard": "Dashboard",
-  "/habits": "Habits",
-  "/statistics": "Statistics",
-  "/profile": "Profile",
+  '/dashboard': 'Dashboard',
+  '/habits': 'Habits',
+  '/statistics': 'Statistics',
+  '/profile': 'Profile',
 };
 
 export default function AppLayout({ children }: { children: ReactNode }) {
@@ -24,23 +24,36 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace("/login");
+      router.replace('/login');
     }
   }, [isLoading, isAuthenticated, router]);
 
   if (isLoading || !isAuthenticated) {
     return (
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+        }}
+      >
         <CircularProgress />
       </Box>
     );
   }
 
-  const title = TITLES[pathname] || "Habit Tracker";
+  const title = TITLES[pathname] || 'Habit Tracker';
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
-      <Box component="nav" sx={{ display: { xs: "none", sm: "block" } }}>
+    <Box
+      sx={{
+        display: 'flex',
+        minHeight: '100vh',
+        bgcolor: 'background.default',
+      }}
+    >
+      <Box component="nav" sx={{ display: { xs: 'none', sm: 'block' } }}>
         <Sidebar />
       </Box>
       <Drawer
@@ -48,12 +61,14 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
         ModalProps={{ keepMounted: true }}
-        sx={{ display: { xs: "block", sm: "none" } }}
+        sx={{ display: { xs: 'block', sm: 'none' } }}
       >
         <Sidebar onNavigate={() => setMobileOpen(false)} />
       </Drawer>
 
-      <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}
+      >
         <Topbar title={title} onMenuClick={() => setMobileOpen(true)} />
         <Box sx={{ p: { xs: 2, sm: 3, md: 4 }, flex: 1 }}>{children}</Box>
       </Box>

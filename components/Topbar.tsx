@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import Box from "@mui/material/Box";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
-function initials(name = ""): string {
+function initials(name = ''): string {
   return name
-    .split(" ")
+    .split(' ')
     .filter(Boolean)
     .slice(0, 2)
     .map((p) => p[0].toUpperCase())
-    .join("");
+    .join('');
 }
 
 interface TopbarProps {
@@ -37,22 +37,29 @@ export default function Topbar({ title, onMenuClick }: TopbarProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   return (
-    <AppBar position="sticky" color="inherit" sx={{ bgcolor: "background.paper" }}>
+    <AppBar
+      position="sticky"
+      color="inherit"
+      sx={{ bgcolor: 'background.paper' }}
+    >
       <Toolbar sx={{ gap: 1 }}>
         <IconButton
           edge="start"
-          sx={{ display: { sm: "none" } }}
+          sx={{ display: { sm: 'none' } }}
           onClick={onMenuClick}
           aria-label="Open menu"
         >
           <MenuRoundedIcon />
         </IconButton>
-        <Typography variant="h6" fontWeight={700} sx={{ flex: 1 }}>
+        <Typography variant="h6" fontWeight={700} sx={{ flex: 1 }} noWrap>
           {title}
         </Typography>
         <Box>
-          <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} aria-label="Account">
-            <Avatar sx={{ width: 34, height: 34, bgcolor: "primary.main" }}>
+          <IconButton
+            onClick={(e) => setAnchorEl(e.currentTarget)}
+            aria-label="Account"
+          >
+            <Avatar sx={{ width: 34, height: 34, bgcolor: 'primary.main' }}>
               {initials(user?.name) || <PersonRoundedIcon fontSize="small" />}
             </Avatar>
           </IconButton>
@@ -60,8 +67,8 @@ export default function Topbar({ title, onMenuClick }: TopbarProps) {
             anchorEl={anchorEl}
             open={!!anchorEl}
             onClose={() => setAnchorEl(null)}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
-            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
             <Box sx={{ px: 2, py: 1 }}>
               <Typography variant="subtitle2" fontWeight={700}>
@@ -75,7 +82,7 @@ export default function Topbar({ title, onMenuClick }: TopbarProps) {
             <MenuItem
               onClick={() => {
                 setAnchorEl(null);
-                router.push("/profile");
+                router.push('/profile');
               }}
             >
               <ListItemIcon>

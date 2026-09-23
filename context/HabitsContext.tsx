@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -8,10 +8,10 @@ import {
   useMemo,
   useState,
   type ReactNode,
-} from "react";
-import * as api from "@/lib/api";
-import { useAuth } from "@/context/AuthContext";
-import type { HabitFormValues, HabitWithProgress } from "@/lib/types";
+} from 'react';
+import * as api from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
+import type { HabitFormValues, HabitWithProgress } from '@/lib/types';
 
 interface HabitsContextValue {
   habits: HabitWithProgress[];
@@ -19,10 +19,17 @@ interface HabitsContextValue {
   error: string | null;
   reload: () => Promise<void>;
   createHabit: (data: HabitFormValues) => Promise<HabitWithProgress>;
-  updateHabit: (id: string, data: HabitFormValues) => Promise<HabitWithProgress>;
+  updateHabit: (
+    id: string,
+    data: HabitFormValues,
+  ) => Promise<HabitWithProgress>;
   deleteHabit: (id: string) => Promise<void>;
   toggleActive: (id: string) => Promise<HabitWithProgress>;
-  setProgress: (id: string, progress: number) => Promise<HabitWithProgress>;
+  setProgress: (
+    id: string,
+    progress: number,
+    date?: string,
+  ) => Promise<HabitWithProgress>;
 }
 
 const HabitsContext = createContext<HabitsContextValue | null>(null);
@@ -38,10 +45,12 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     setError(null);
     try {
-      const data = await api.getHabits(user.id);
+      const data = await api.getHabits();
       setHabits(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Couldn't load your habits.");
+      setError(
+        err instanceof Error ? err.message : "Couldn't load your habits.",
+      );
     } finally {
       setLoading(false);
     }
@@ -58,12 +67,12 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
 
   const createHabit = useCallback(
     async (data: HabitFormValues) => {
-      if (!user) throw new Error("No active session.");
-      const habit = await api.createHabit(user.id, data);
+      if (!user) throw new Error('No active session.');
+      const habit = await api.createHabit(data);
       setHabits((prev) => [...prev, habit]);
       return habit;
     },
-    [user]
+    [user],
   );
 
   const updateHabit = useCallback(async (id: string, data: HabitFormValues) => {
@@ -84,13 +93,12 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setProgress = useCallback(
-    async (id: string, progress: number) => {
-      if (!user) throw new Error("No active session.");
-      const habit = await api.setTodayProgress(id, user.id, progress);
+    async (id: string, progress: number, date?: string) => {
+      const habit = await api.setProgress(id, progress, date);
       setHabits((prev) => prev.map((h) => (h.id === id ? habit : h)));
       return habit;
     },
-    [user]
+    [],
   );
 
   const value = useMemo<HabitsContextValue>(
@@ -105,14 +113,26 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
       toggleActive,
       setProgress,
     }),
-    [habits, loading, error, reload, createHabit, updateHabit, deleteHabit, toggleActive, setProgress]
+    [
+      habits,
+      loading,
+      error,
+      reload,
+      createHabit,
+      updateHabit,
+      deleteHabit,
+      toggleActive,
+      setProgress,
+    ],
   );
 
-  return <HabitsContext.Provider value={value}>{children}</HabitsContext.Provider>;
+  return (
+    <HabitsContext.Provider value={value}>{children}</HabitsContext.Provider>
+  );
 }
 
 export function useHabits(): HabitsContextValue {
   const ctx = useContext(HabitsContext);
-  if (!ctx) throw new Error("useHabits must be used within HabitsProvider");
+  if (!ctx) throw new Error('useHabits must be used within HabitsProvider');
   return ctx;
 }

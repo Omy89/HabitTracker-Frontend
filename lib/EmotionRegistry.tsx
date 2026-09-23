@@ -1,15 +1,17 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import createCache from "@emotion/cache";
-import { useServerInsertedHTML } from "next/navigation";
-import { CacheProvider } from "@emotion/react";
+import * as React from 'react';
+import createCache from '@emotion/cache';
+import { useServerInsertedHTML } from 'next/navigation';
+import { CacheProvider } from '@emotion/react';
 
-// Based on MUI's official guide for integrating Emotion with the Next.js
-// App Router (avoids the "flash" of unstyled content during SSR).
-export default function EmotionRegistry({ children }: { children: React.ReactNode }) {
+export default function EmotionRegistry({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [{ cache, flush }] = React.useState(() => {
-    const cache = createCache({ key: "mui" });
+    const cache = createCache({ key: 'mui' });
     cache.compat = true;
     const prevInsert = cache.insert;
     let inserted: string[] = [];
@@ -31,14 +33,14 @@ export default function EmotionRegistry({ children }: { children: React.ReactNod
   useServerInsertedHTML(() => {
     const names = flush();
     if (names.length === 0) return null;
-    let styles = "";
+    let styles = '';
     names.forEach((name) => {
       styles += cache.inserted[name];
     });
     return (
       <style
         key={cache.key}
-        data-emotion={`${cache.key} ${names.join(" ")}`}
+        data-emotion={`${cache.key} ${names.join(' ')}`}
         dangerouslySetInnerHTML={{ __html: styles }}
       />
     );

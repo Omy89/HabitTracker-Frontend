@@ -1,22 +1,23 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import Typography from "@mui/material/Typography";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import AuthLayout from "@/components/AuthLayout";
-import { useAuth } from "@/context/AuthContext";
-import { loginSchema, zodErrors } from "@/lib/schemas";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import Typography from '@mui/material/Typography';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import AuthLayout from '@/components/AuthLayout';
+import { useAuth } from '@/context/AuthContext';
+import { loginSchema, zodErrors } from '@/lib/schemas';
+import { getErrorMessage } from '@/lib/errors';
 
-const emptyForm = { email: "", password: "" };
+const emptyForm = { email: '', password: '' };
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -25,28 +26,32 @@ export default function LoginPage() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState("");
+  const [formError, setFormError] = useState('');
 
   const errors = zodErrors(loginSchema, form);
   const isValid = Object.keys(errors).length === 0;
+  const error = (field: string) =>
+    touched[field] && errors[field] ? errors[field] : undefined;
 
-  const handleChange = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
-  };
+  const handleChange =
+    (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    };
 
-  const handleBlur = (field: string) => () => setTouched((prev) => ({ ...prev, [field]: true }));
+  const handleBlur = (field: string) => () =>
+    setTouched((prev) => ({ ...prev, [field]: true }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({ email: true, password: true });
-    setFormError("");
+    setFormError('');
     if (!isValid) return;
     setSubmitting(true);
     try {
-      await login(form);
-      router.push("/dashboard");
+      await login({ email: form.email.trim(), password: form.password });
+      router.push('/dashboard');
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Couldn't sign in.");
+      setFormError(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
@@ -62,22 +67,22 @@ export default function LoginPage() {
           type="email"
           fullWidth
           value={form.email}
-          onChange={handleChange("email")}
-          onBlur={handleBlur("email")}
-          error={touched.email && !!errors.email}
-          helperText={touched.email && errors.email}
+          onChange={handleChange('email')}
+          onBlur={handleBlur('email')}
+          error={!!error('email')}
+          helperText={error('email')}
           autoComplete="email"
         />
 
         <TextField
           label="Password"
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           fullWidth
           value={form.password}
-          onChange={handleChange("password")}
-          onBlur={handleBlur("password")}
-          error={touched.password && !!errors.password}
-          helperText={touched.password && errors.password}
+          onChange={handleChange('password')}
+          onBlur={handleBlur('password')}
+          error={!!error('password')}
+          helperText={error('password')}
           autoComplete="current-password"
           InputProps={{
             endAdornment: (
@@ -94,13 +99,18 @@ export default function LoginPage() {
           }}
         />
 
-        <Button type="submit" variant="contained" size="large" disabled={submitting}>
-          {submitting ? "Signing in..." : "Sign in"}
+        <Button
+          type="submit"
+          variant="contained"
+          size="large"
+          disabled={submitting}
+        >
+          {submitting ? 'Signing in...' : 'Sign in'}
         </Button>
 
         <Typography variant="body2" color="text.secondary" textAlign="center">
-          Don&apos;t have an account?{" "}
-          <Link href="/register" style={{ color: "inherit", fontWeight: 600 }}>
+          Don&apos;t have an account?{' '}
+          <Link href="/register" style={{ color: 'inherit', fontWeight: 600 }}>
             Sign up
           </Link>
         </Typography>
