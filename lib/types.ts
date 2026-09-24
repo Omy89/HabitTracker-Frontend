@@ -14,7 +14,6 @@ export type Frequency = (typeof FREQUENCIES)[number];
 export const PRIORITIES = ['High', 'Medium', 'Low'] as const;
 export type Priority = (typeof PRIORITIES)[number];
 
-/** Monday first; values follow Date#getDay (0 = Sunday). */
 export const WEEKDAYS = [1, 2, 3, 4, 5, 6, 0] as const;
 
 export type StreakUnit = 'day' | 'week';
@@ -28,7 +27,6 @@ export interface Session {
 export interface UserProfile extends Session {
   createdAt: string;
   totalHabits: number;
-  /** Best run of days completing at least one habit (same as the dashboard). */
   bestStreak: number;
 }
 

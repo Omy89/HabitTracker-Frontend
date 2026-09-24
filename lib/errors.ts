@@ -1,6 +1,5 @@
 import { ApiError } from '@/lib/api';
 
-/** Turns any thrown error into a message for the user. */
 export function getErrorMessage(err: unknown): string {
   if (err instanceof ApiError) {
     if (err.status === 0) {

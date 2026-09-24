@@ -75,7 +75,6 @@ export default function ProfilePage() {
     }
   }, [user]);
 
-  // Reload when habits change so the activity summary stays current.
   useEffect(() => {
     api
       .getProfile()

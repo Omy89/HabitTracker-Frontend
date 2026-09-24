@@ -12,7 +12,6 @@ import type {
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
-/** `status` is 0 when the server couldn't be reached. */
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -54,8 +53,6 @@ function query(params: Record<string, string | undefined>): string {
   return entries.length ? `?${new URLSearchParams(entries)}` : '';
 }
 
-// Auth
-
 export async function getSession(): Promise<Session | null> {
   try {
     return await request<Session>('/auth/me');
@@ -86,8 +83,6 @@ export async function logout(): Promise<void> {
   await request<{ ok: true }>('/auth/logout', { method: 'POST' });
 }
 
-// Users
-
 export function getProfile() {
   return request<UserProfile>('/users/me');
 }
@@ -109,8 +104,6 @@ export async function changePassword(data: {
   });
   return ok;
 }
-
-// Habits
 
 export function getHabits() {
   return request<HabitWithProgress[]>('/habits');
@@ -152,15 +145,12 @@ export function toggleHabitActive(habitId: string) {
   });
 }
 
-/** Records progress (0-100) for a day; defaults to today on the server. */
 export function setProgress(habitId: string, progress: number, date?: string) {
   return request<HabitWithProgress>(`/habits/${habitId}/progress`, {
     method: 'PATCH',
     body: JSON.stringify({ progress: Math.round(progress), date }),
   });
 }
-
-// Statistics
 
 export function getDashboardSummary() {
   return request<DashboardSummary>('/statistics/dashboard');

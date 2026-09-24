@@ -1,5 +1,3 @@
-// Dates travel as "YYYY-MM-DD" strings in the user's local calendar.
-
 function pad(n: number): string {
   return String(n).padStart(2, '0');
 }

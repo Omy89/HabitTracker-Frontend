@@ -145,7 +145,6 @@ export default function HabitHistoryDialog({
     if (open) load();
   }, [open, load]);
 
-  // Start on the current month the next time the dialog opens.
   useEffect(() => {
     if (!open) setMonth(dayjs());
   }, [open]);
@@ -160,7 +159,6 @@ export default function HabitHistoryDialog({
     const next = (progressByDate[date] ?? 0) >= 100 ? 0 : 100;
     setSaving(true);
     setError('');
-    // Optimistic update so the calendar reacts right away.
     setProgressByDate((prev) => ({ ...prev, [date]: next }));
     try {
       await onSetProgress(habit.id, next, date);

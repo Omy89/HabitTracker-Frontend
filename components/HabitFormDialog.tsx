@@ -42,7 +42,6 @@ function emptyForm(): HabitFormValues {
   };
 }
 
-/** Short weekday name; 2024-01-07 was a Sunday. */
 function weekdayLabel(day: number): string {
   return new Date(2024, 0, 7 + day).toLocaleDateString('en-US', {
     weekday: 'short',
@@ -76,7 +75,6 @@ interface ChipFieldProps<T> {
   error?: boolean;
 }
 
-/** A labeled row of clickable chips; selected chips are filled. */
 function ChipField<T extends string | number>({
   label,
   options,

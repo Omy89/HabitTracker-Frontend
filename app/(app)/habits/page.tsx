@@ -101,7 +101,6 @@ function HabitsPageContent() {
     return matchesSearch && matchesCategory;
   });
 
-  // Read the habit from context so the history dialog shows fresh streaks.
   const historyHabit = habits.find((h) => h.id === historyHabitId) ?? null;
 
   const showError = (err: unknown) =>
@@ -489,7 +488,6 @@ function HabitsPageContent() {
   );
 }
 
-// useSearchParams needs a Suspense boundary in the App Router.
 export default function HabitsPage() {
   return (
     <Suspense>

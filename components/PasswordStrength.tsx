@@ -18,7 +18,6 @@ const SCORE_COLORS = [
 
 export default function PasswordStrength({ password }: { password: string }) {
   const allOk = PASSWORD_RULES.every((r) => r.test(password));
-  // Never show "strong" while a requirement is still missing.
   const score = allOk
     ? passwordScore(password)
     : Math.min(passwordScore(password), 2);

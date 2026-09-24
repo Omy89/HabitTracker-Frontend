@@ -12,7 +12,6 @@ interface StatCardProps {
   label: string;
   value: string | number;
   accent?: 'primary' | 'secondary' | 'success' | 'warning' | 'error';
-  /** Small helper text under the label. */
   caption?: string;
 }
 
